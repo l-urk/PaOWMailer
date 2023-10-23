@@ -1,0 +1,6 @@
+Subject: Your Subject Line
+
+Hello {recipient_name}, We are excited to announce our latest product launch...
+
+Yours Truly,
+Example Name
