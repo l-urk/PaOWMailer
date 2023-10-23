@@ -8,6 +8,7 @@ This text file contains the email message that you want to send to the recipient
 The file should be in plain text format and organized as follows:
 
 <img width="494" alt="image" src="https://github.com/l-urk/PaOWMailer/assets/112792604/36dbf696-260e-4c8d-8a6c-4162ac4240a6">
+
 Be sure to change this to your own custom message before sending to any clients.
 
 # contacts.csv:
@@ -16,6 +17,7 @@ Description: This CSV (Comma-Separated Values) file contains the details of the 
 Format: The file should be structured with two columns: "Name" and "Email," where each row represents a recipient. The "Name" column should contain the recipient's name, and the "Email" column should contain their email address.
 
 <img width="205" alt="contacts" src="https://github.com/l-urk/PaOWMailer/assets/112792604/656e5c9e-3786-4204-bafe-914781067c6b">
+
 Be sure to change these names and emails to your own list before attempting to send anything.
 
 Ensure that you have these files in the specified formats and in the same location as locations as PaOWMailer.py as the program requires them for sending personalized bulk emails.
