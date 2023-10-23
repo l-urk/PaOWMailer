@@ -7,10 +7,7 @@ PaOWMailer is a Python script that simplifies sending personalized bulk emails t
 Description: This text file contains the email message that you want to send to the recipients. It includes both the subject and the body of the email, and it can contain placeholders for recipient-specific information.
 Format: The file should be in plain text format and organized as follows:
 
-Subject: Your Subject Line
-
-Hello {recipient_name},
-We are excited to announce our latest product launch...
+<img width="496" alt="image" src="https://github.com/l-urk/PaOWMailer/assets/112792604/86bb2cf3-a473-4a94-b38b-47551307adef">
 
 # contacts.csv:
 
