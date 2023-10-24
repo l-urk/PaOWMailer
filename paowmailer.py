@@ -35,7 +35,7 @@ try:
             print("\033[97m1(space). Send emails with pasted email list and message")
             print("2(enter). Send emails with contacts.csv and message.txt")
             print("3(ctrlC). Exit")        
-            choice = input("Enter 1, 2, or 3: ")
+            choice = input(":")
             if choice == "1" or choice == " ":
                 clear_screen()
                 print(banner)
@@ -83,21 +83,30 @@ try:
                 print("May include recipient details in format \033[1m'First Last, Email First Last, Email'\033[0m")
                 print("Or, may include recipient details as... \033[1m'Name, Email Name, Email...'\033[0m")
                 print("For example: '\033[97mFoo Bar, \033[34mfoobar@foobar.com\033[97m, Rue L Ryuzaki, \033[34mb.b.rue.l.ryuzaki@gmail.com\033[97m... etc, more...")
-                recipient_input = input("\033[37mInput details in above format or return to quit out: ")
-                if recipient_input.lower() == '':
-                    clear_screen()
-                    print(banner)
-                    display_menu()
-                else:
+                recipient_details = []
+                    
+                while True:
+                    recipient_input = input("Enter a recipient as 'Name, Email' (or type 'done' to finish): ")
+
+                    if recipient_input.lower() == 'done':
+                        break
+                    elif recipient_input.lower() == '':
+                        clear_screen()
+                        print(banner)
+                        display_menu()
+
                     try:
                         recipient_name, recipient_email = recipient_input.split(',')
                         recipient_details.append((recipient_name.strip(), recipient_email.strip()))
+                    
+                        
                     except ValueError:
                         clear_screen()
                         print(banner)
-                        print("\033[91mNo recipients inputed.")
+                        print("\033[91mInvalid input. Please use 'Name, Email' format.")
                         display_menu()
-                    time.sleep(5)
+
+
                 subject = input("Enter the subject: ")
                 print("Enter the message text.")
                 print("May include refernces like {recipient_name}, {recipient_email}, {sender_email}")
@@ -107,21 +116,34 @@ try:
             for name, recipient_email in recipient_details:
                 try:
                     full_message = f"Subject: {subject}\n\nDear {name},\n{message}"
-                    print(f'Email sent to {recipient_name} ({recipient_email}) successfully.')
+                    print(f'\033[32mEmail sent to {recipient_name} ({recipient_email}) successfully.')
                 except Exception as e:
                     full_message = f"Subject: {subject}\n\nDear {name},\n{message}"
                     smtp.sendmail(sender_email, recipient_email, full_message)
+                time.sleep(5)        
             smtp.quit()
         def login_send_with_files():
             sender_email = input("Enter your Outlook email: ")
             sender_password = input("Enter your Outlook password: ")
             smtp_server = 'smtp-mail.outlook.com'
             smtp_port = 587
+            
+            if not os.path.isfile('message.txt'):
+                print("\033[31mThe 'message.txt' file does not exist. Please create the message.txt file and try again.")
+                time.sleep(3)
+                return # Exit the function
+
             with open('message.txt', 'r') as file:
                 lines = file.read().split('\n')
-            subject = lines[0]
-            message = '\n'.join(lines[1:])
-            recipient_details = []
+                subject = lines[0]
+                message = '\n'.join(lines[1:])
+                recipient_details = []
+                
+            if not os.path.isfile('contacts.csv'):
+                print("\033[31mThe 'contacts.csv' file does not exist. Please create the contacts.csv file and try again.")
+                time.sleep(3)
+                return # Exit the function    
+                
             with open('contacts.csv', 'r') as file:
                 reader = csv.DictReader(file)
                 for row in reader:
@@ -140,7 +162,7 @@ try:
                     msg.attach(MIMEText(message.replace('{recipient_name}', recipient_name), 'plain'))
                     try:
                         smtp.sendmail(sender_email, recipient_email, msg.as_string())
-                        print(f'Email sent to {recipient_name} ({recipient_email}) successfully.')
+                        print(f'\033[32mEmail sent to {recipient_name} ({recipient_email}) successfully.')
                     except Exception as e:
                         print(f'Email to {recipient_name} ({recipient_email}) failed. Error: {str(e)}')
             except smtplib.SMTPException as e:
