@@ -79,14 +79,10 @@ try:
             recipient_details = []
             while True:
                 print(f'\033[32mLogged in as {sender_email}')
-                print("\033[37mPlease add recipeints to your batch email.")
-                print("May include recipient details in format \033[1m'First Last, Email First Last, Email'\033[0m")
-                print("Or, may include recipient details as... \033[1m'Name, Email Name, Email...'\033[0m")
-                print("For example: '\033[97mFoo Bar, \033[34mfoobar@foobar.com\033[97m, Rue L Ryuzaki, \033[34mb.b.rue.l.ryuzaki@gmail.com\033[97m... etc, more...")
                 recipient_details = []
                     
                 while True:
-                    recipient_input = input("Enter a recipient as 'Name, Email' (or type 'done' to finish): ")
+                    recipient_input = input("\033[97mEnter a recipient as 'Name,Email' (or type 'done' to finish): ")
 
                     if recipient_input.lower() == 'done':
                         break
@@ -116,12 +112,15 @@ try:
             for name, recipient_email in recipient_details:
                 try:
                     full_message = f"Subject: {subject}\n\nDear {name},\n{message}"
+                    smtp.sendmail(sender_email, recipient_email, full_message)
                     print(f'\033[32mEmail sent to {recipient_name} ({recipient_email}) successfully.')
+                    time.sleep(1) 
                 except Exception as e:
                     full_message = f"Subject: {subject}\n\nDear {name},\n{message}"
-                    smtp.sendmail(sender_email, recipient_email, full_message)
-                time.sleep(5)        
-            smtp.quit()
+                time.sleep(5) 
+                smtp.quit()
+            
+
         def login_send_with_files():
             sender_email = input("Enter your Outlook email: ")
             sender_password = input("Enter your Outlook password: ")
@@ -163,8 +162,10 @@ try:
                     try:
                         smtp.sendmail(sender_email, recipient_email, msg.as_string())
                         print(f'\033[32mEmail sent to {recipient_name} ({recipient_email}) successfully.')
+                        time.sleep(5)
                     except Exception as e:
-                        print(f'Email to {recipient_name} ({recipient_email}) failed. Error: {str(e)}')
+                        print(f'\033[91Email to {recipient_name} ({recipient_email}) failed. Error: {str(e)}')
+                        time.sleep(5)
             except smtplib.SMTPException as e:
                 clear_screen()
                 print(banner)
