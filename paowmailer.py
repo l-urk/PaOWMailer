@@ -32,7 +32,7 @@ try:
         clear_screen()
         print(banner)
         def display_menu():  
-            print("\033[97m1(space). Send emails with pasted email list and message")
+            print("\033[97m1(space). Send a single email with pasted email list and message")
             print("2(enter). Send emails with contacts.csv and message.txt")
             print("3(ctrlC). Exit")        
             choice = input(":")
@@ -82,45 +82,38 @@ try:
                 recipient_details = []
                     
                 while True:
-                    recipient_input = input("\033[97mEnter a recipient as 'Name,Email' (or type 'done' to finish): ")
+                    recipient_input = input("\033[97mEnter a singlle recipient as 'Name,Email' (or type 'done' or press enter to finish): ")
 
                     if recipient_input.lower() == 'done':
                         break
                     elif recipient_input.lower() == '':
-                        clear_screen()
-                        print(banner)
-                        display_menu()
+                        break
 
                     try:
                         recipient_name, recipient_email = recipient_input.split(',')
                         recipient_details.append((recipient_name.strip(), recipient_email.strip()))
-                    
-                        
+                   
                     except ValueError:
                         clear_screen()
                         print(banner)
-                        print("\033[91mInvalid input. Please use 'Name, Email' format.")
+                        print("\033[91mInvalid input. Please use 'Name,Email' format.")
                         display_menu()
 
-
                 subject = input("Enter the subject: ")
-                print("Enter the message text.")
-                print("May include refernces like {recipient_name}, {recipient_email}, {sender_email}")
-                print("For example: Hello, {recipient_name} of the , I trust you are aware of the significance of our mission.")
-                message = input("In unity and obscurity, In unity and obscurity, Mr. Robot {sender_email}: ")
+                message = input("Enter the message text: ")
                 break
-            for name, recipient_email in recipient_details:
+            for recipient_name in recipient_details:
                 try:
-                    full_message = f"Subject: {subject}\n\nDear {name},\n{message}"
+                    full_message = f"Subject: {subject}\n\nDear {recipient_name},\n{message}"
                     smtp.sendmail(sender_email, recipient_email, full_message)
                     print(f'\033[32mEmail sent to {recipient_name} ({recipient_email}) successfully.')
                     time.sleep(1) 
                 except Exception as e:
-                    full_message = f"Subject: {subject}\n\nDear {name},\n{message}"
+                    full_message = f"Subject: {subject}\n\nDear {recipient_name},\n{message}"
                 time.sleep(5) 
                 smtp.quit()
-            
-
+            smtp.quit()
+            display_menu()
         def login_send_with_files():
             sender_email = input("Enter your Outlook email: ")
             sender_password = input("Enter your Outlook password: ")
